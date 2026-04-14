@@ -1,3 +1,0 @@
-D:/GitHub/bloom-filter-gpu/build/CMakeFiles/test_bloom_filter.dir
-D:/GitHub/bloom-filter-gpu/build/CMakeFiles/ALL_BUILD.dir
-D:/GitHub/bloom-filter-gpu/build/CMakeFiles/ZERO_CHECK.dir
