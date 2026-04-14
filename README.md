@@ -16,7 +16,7 @@ The C++ CPU implementation serves as a reference baseline and correctness oracle
 for the CUDA port.
 
 ## Project Structure
-
+```
 bloom-filter-gpu/
 ├── src/
 │   ├── bloom_filter.h
@@ -24,7 +24,7 @@ bloom-filter-gpu/
 ├── tests/
 │   └── test_bloom_filter.cpp
 └── CMakeLists.txt
-
+```
 ## Building
 
 ### Prerequisites
