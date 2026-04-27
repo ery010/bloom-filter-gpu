@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <cstddef>
 #include <vector>
+#include "bloom_common.h"
 
 class BloomFilter {
 public:
@@ -11,9 +12,6 @@ public:
     double fp_rate(std::size_t n_elements) const;
 
 private:
-    static constexpr std::uint64_t A1 = 0x517cc1b727220a95ULL;
-    static constexpr std::uint64_t A2 = 0x6c62272e07bb0143ULL;
-    
     std::size_t bit_count_;
     std::size_t hash_count_;
     std::size_t log2_bits_;
