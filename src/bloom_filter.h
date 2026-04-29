@@ -14,7 +14,6 @@ public:
 private:
     std::size_t bit_count_;
     std::size_t hash_count_;
-    std::size_t log2_bits_;
     std::vector<std::uint64_t> bits_;
     std::pair<std::size_t, std::size_t> hash_pair(std::uint64_t key) const;
 };

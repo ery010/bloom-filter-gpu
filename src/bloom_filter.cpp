@@ -1,7 +1,7 @@
 #include "bloom_filter.h"
 #include <cmath>
-#include <bit>
 #include <stdexcept>
+#include <bit>
 
 BloomFilter::BloomFilter(std::size_t bit_count, std::size_t hash_count)
 {     
@@ -9,12 +9,9 @@ BloomFilter::BloomFilter(std::size_t bit_count, std::size_t hash_count)
         throw std::invalid_argument("bit_count must be greater than 0");
     if (hash_count == 0)
         throw std::invalid_argument("hash_count must be greater than 0");
-    if ((bit_count & (bit_count - 1)) != 0)
-        throw std::invalid_argument("bit_count must be a power of 2");
       
       bit_count_ = bit_count;
       hash_count_ = hash_count;
-      log2_bits_ = std::bit_width(bit_count_) - 1;
       bits_.assign((bit_count + 63) / 64, 0);
 }
 
@@ -22,7 +19,7 @@ void BloomFilter::add(std::uint64_t key) {
     auto [h1, h2] = hash_pair(key);
     for (std::size_t i = 0; i < hash_count_; ++i) {
         std::size_t bit = (h1 + i * h2) % bit_count_;
-        bits_[bit / 64] |= (1ULL << (bit % 64));
+        bloom::set_bit(bits_.data(), bit);
     }
 }
 
@@ -30,7 +27,7 @@ bool BloomFilter::contains(std::uint64_t key) const {
     auto [h1, h2] = hash_pair(key);
     for (std::size_t i = 0; i < hash_count_; ++i) {
         std::size_t bit = (h1 + i * h2) % bit_count_;
-        if (!(bits_[bit / 64] & (1ULL << (bit % 64))))
+        if (!bloom::check_bit(bits_.data(), bit))
             return false;
     }
     return true;
@@ -42,7 +39,6 @@ double BloomFilter::fp_rate(std::size_t n_elements) const {
 }
 
 std::pair<std::size_t, std::size_t> BloomFilter::hash_pair(std::uint64_t key) const {
-    std::uint64_t h1 = (A1 * key) >> (64 - log2_bits_);
-    std::uint64_t h2 = (A2 * key) >> (64 - log2_bits_);
-    return {h1, h2};
+    std::size_t shift = 64 - (std::bit_width(bit_count_) - 1);
+    return {bloom::hash1(key, shift), bloom::hash2(key, shift)};
 }

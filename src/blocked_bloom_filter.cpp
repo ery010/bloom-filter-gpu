@@ -17,3 +17,8 @@ BlockedBloomFilter::BlockedBloomFilter(std::size_t bit_count, std::size_t hash_c
     if (bit_count % block_size != 0)
         throw std::invalid_argument("bit_count must be divisible by block_size");
 }
+
+void BlockedBloomFilter::add(std::uint64_t key) {
+    auto [h1, h2] = hash_pair(key);
+    std::size_t block_idx = h1 & (n_blocks_ - 1); // bitmask optimization (powers of 2 blocks)
+}

@@ -159,11 +159,6 @@ void test_invalid_inputs() {
         assert(false && "should have thrown on hash_count=0");
     } catch (const std::invalid_argument&) {}
 
-    try {
-        BloomFilter bf(1000, 3);
-        assert(false && "should have thrown on non-power-of-2 bit_count");
-    } catch (const std::invalid_argument&) {}
-
     std::cout << "PASS: invalid inputs throw correctly\n";
 }
 
