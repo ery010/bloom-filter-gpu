@@ -1,28 +1,42 @@
-# Bloom Filter GPU
+# Bloom Filter Optimization on GPU Architecture
 
-A GPU-accelerated Bloom filter implemented in CUDA, based on the paper
-*Optimizing Bloom Filters for Modern GPU Architectures* (Jünger et al., 2025).
+A CUDA implementation of
+[*Optimizing Bloom Filters for Modern GPU Architectures* (Jünger et al., 2025)](https://arxiv.org/pdf/2512.15595).
 
 ## Overview
 
-Bloom filters are a probabilistic data structure for approximate membership
-queries used in databases, data analytics, and genomics. While CPU
-implementations are well studied, GPU designs remain underexplored. This project
-implements and optimizes Bloom filter variants for modern GPU architectures,
-following the design space explored in the paper across three dimensions:
-vectorization, thread cooperation, and compute latency.
+Bloom filters are probabilistic data structures for approximate membership
+queries. While space-efficient, their probabilistic nature means that 100% accuracy is not guaranteed, and false positives are possible (false negatives are not).
 
-The C++ CPU implementation serves as a reference baseline and correctness oracle
-for the CUDA port.
+This project implements Bloom filter variants optimized for modern GPU architectures. The paper names 3 optimization strategies:
+* Horizontal & Vertical Vectorization
+* Key Pattern Generation
+* Adaptive Thread Cooperation
+
+The algorithms implemented in this project are:
+* `CBF`: Classical Bloom Filter
+* `BBF`: Blocked Bloom Filter
+* `SBF`: Sectorized Bloom Filter
+* `CSBF`: Cache-Sectorized Bloom Filter
+
 
 ## Project Structure
 ```
 bloom-filter-gpu/
+├── include/ 
+|   └── bloom_filter/
+|       ├── CBF.cuh
+|       ├── BBF.cuh
+|       ├── SBF.cuh
+│       └── CSBF.cuh
+|
 ├── src/
 │   ├── bloom_filter.h
 │   └── bloom_filter.cpp
+|
 ├── tests/
 │   └── test_bloom_filter.cpp
+|
 └── CMakeLists.txt
 ```
 ## Building
