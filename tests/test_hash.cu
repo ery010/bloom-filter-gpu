@@ -73,8 +73,8 @@ int main() {
 
     // checks
     for (int i = 0; i < n; i++) {
-        printf("--- key = %llu ---\n", keys[i]);
-        printf("seed = %llu\n", results[i].seed);
+        printf("--- key = %lu ---\n", keys[i]);
+        printf("seed = %lu\n", results[i].seed);
 
         for (uint32_t j = 0; j < k; j++) {
             uint32_t mask = results[i].masks[j];

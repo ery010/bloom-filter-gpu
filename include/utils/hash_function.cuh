@@ -38,15 +38,26 @@ __device__ __forceinline__ uint64_t generate_seed(uint64_t key) {
     constexpr uint64_t PRIME4 = 0x85EBCA77C2B2AE63ULL;
     constexpr uint64_t PRIME5 = 0x27D4EB2F165667C5ULL;
 
-    uint64_t h = PRIME5 + 8;
-    h ^= key * PRIME3;
-    h = ((h << 31) | (h >> 33)) * PRIME1;
-    h ^= h >> 33;
-    h *= PRIME2;
-    h ^= h >> 29;
-    h *= PRIME3;
-    h ^= h >> 32;
-    return h;
+    // Step 1 special case: input < 32 bytes, seed = 0
+    uint64_t acc = PRIME5;       
+
+    // Step 4: add input length
+    acc += 8ULL;
+
+    // Step 5: consume remaining 8 bytes (one 8-byte lane)
+    uint64_t lane = key;
+    acc ^= ((lane * PRIME2 << 31) | (lane * PRIME2 >> 33)) * PRIME1;  // round(0, lane)
+    acc  = ((acc << 27) | (acc >> 37)) * PRIME1;
+    acc += PRIME4;
+
+    // Step 6: avalanche
+    acc ^= acc >> 33;
+    acc *= PRIME2;
+    acc ^= acc >> 29;
+    acc *= PRIME3;
+    acc ^= acc >> 32;
+
+    return acc;
 }
 
 // Seed and one salt index
