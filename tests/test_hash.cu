@@ -43,6 +43,14 @@ __global__ void test_kernel(uint64_t* keys, HashResult* results, int n) {
 
 int main() {
 
+    int device;
+    cudaGetDevice(&device);
+    cudaDeviceProp props;
+    cudaGetDeviceProperties(&props, device);
+    printf("Running on: %s\n", props.name);
+    printf("SM count:   %d\n", props.multiProcessorCount);
+    printf("VRAM:       %.0f MB\n", props.totalGlobalMem / 1e6);
+
     printf("Hash function test\n");
     
     uint64_t keys[] = {
@@ -50,9 +58,10 @@ int main() {
         42ULL,
         12345ULL,
         0xDEADBEEFULL,
-        0xFFFFFFFFFFFFFFFFULL
+        0xFFFFFFFFFFFFFFFFULL,
+        67676710
     };
-    int n = 5;
+    int n = 6;
 
      // allocate device memory
     uint64_t*   d_keys;
@@ -68,7 +77,7 @@ int main() {
     cudaDeviceSynchronize();
 
     // copy results back
-    HashResult results[5];
+    HashResult results[6];
     cudaMemcpy(results, d_results, n * sizeof(HashResult), cudaMemcpyDeviceToHost);
 
     // checks
@@ -98,7 +107,28 @@ int main() {
             printf("\n");
     }
 
-    // free
+    // test hash results against xxHash:
+    uint64_t expected_seeds[] = {
+        // reference from testing xxHash official implementation
+        11468921228449061269ULL,  // key=1
+        13066772586158965587ULL,  // key=42
+        17744734807539824643ULL,  // key=12345
+        3717424236041604216ULL,   // key=0xDEADBEEF
+        9642548396912002761ULL,   // key=0xFFFFFFFFFFFFFFFF,
+        1624227166577344856,      // key=67676710
+        
+    };
+
+    printf("\n=== Seed validation against xxhash reference ===\n");
+    for (int i = 0; i < n; i++) {
+        if (results[i].seed == expected_seeds[i])
+            printf("PASS seed matches reference for key %lu\n", keys[i]);
+        else
+            printf("FAIL seed mismatch for key %lu\n  got:      %lu\n  expected: %lu\n",
+                keys[i], results[i].seed, expected_seeds[i]);
+    }
+    
+    // free memory
     cudaFree(d_keys);
     cudaFree(d_results);
 
