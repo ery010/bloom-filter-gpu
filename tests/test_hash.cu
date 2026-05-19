@@ -3,7 +3,7 @@
 #include <cstdint>
 
 // Constants
-static constexpr uint32_t k = 7;
+static constexpr uint32_t k = 16;
 static constexpr uint32_t num_blocks = 1024;
 static constexpr uint32_t words_per_group = 4;
 static constexpr uint32_t block_shift = 64 - 10;
@@ -131,7 +131,6 @@ int main() {
     // free memory
     cudaFree(d_keys);
     cudaFree(d_results);
-
     
     return 0;
 }
