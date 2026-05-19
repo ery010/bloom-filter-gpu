@@ -13,3 +13,8 @@ uint32_t* cbf_create(uint64_t m_bits) {
 }
 
 
+
+// Free up memory
+void cbf_destroy(uint32_t* d_bits) {
+    cudaFree(d_bits);
+}
