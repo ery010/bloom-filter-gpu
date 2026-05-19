@@ -76,6 +76,6 @@ __device__ __forceinline__ uint32_t word_index(uint64_t mixed, uint32_t shift, u
 }
 
 // Map mixed value to single-bit mask within 32-bit word
-__device__ __forceinline__ uint32_t bit_mask(uint64_t mixed) {
-    return 1u << (mixed & 31);
+__device__ __forceinline__ uint64_t bit_mask(uint64_t mixed) {
+    return 1ULL << (mixed & 63);
 }

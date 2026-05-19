@@ -14,7 +14,7 @@ static constexpr uint32_t word_shift = 64 - 2;
 struct HashResult {
     uint64_t seed;
     uint64_t mixed[k];
-    uint32_t masks[k];
+    uint64_t masks[k];
     uint32_t blk_idx;
     uint32_t word_idx;
 };
@@ -86,7 +86,7 @@ int main() {
         printf("seed = %lu\n", results[i].seed);
 
         for (uint32_t j = 0; j < k; j++) {
-            uint32_t mask = results[i].masks[j];
+            uint64_t mask = results[i].masks[j];
             if (mask != 0 && (mask & (mask - 1)) == 0)
                 printf("PASS mask[%u] has one bit set\n", j);
             else
