@@ -2,7 +2,7 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <cstdint>
-#include "hash_function.cuh"
+#include <stdexcept>
 
 // CBF struct helper
 struct ClassicalBloomFilter {
