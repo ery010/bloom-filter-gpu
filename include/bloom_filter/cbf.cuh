@@ -12,37 +12,13 @@ struct ClassicalBloomFilter {
 
 };
 
-ClassicalBloomFilter create_filter(uint32_t total_bits, uint32_t k) {
-    ClassicalBloomFilter filter;
-
-    // Round to nearest 64-bit word
-    filter.num_words = (total_bits + 63) / 64;
-    filter.k_hashes = k;
-    
-    // Total bytes to allocate
-    size_t total_bytes = filter.num_words * sizeof(uint64_t);
-
-    cudaMalloc((void**)&filter.d_bits, total_bytes);
-    cudaMemset(filter.d_bits, 0, total_bytes);
-
-    return filter;
-
-}
-
-
-
+ClassicalBloomFilter create_filter(uint32_t total_bits, uint32_t k);
 
 // Insert
-void cbf_insert(uint64_t* d_bits, const uint64_t* d_keys, uint64_t n, uint32_t k, uint32_t shift) {
-
-}
+void cbf_insert(ClassicalBloomFilter& filter, const uint64_t* d_keys, uint64_t n);
 
 // Lookup
-void cbf_lookup(uint64_t* d_bits, const uint64_t* d_keys, uint64_t n, bool* d_results, uint32_t k, uint32_t shift) {
-
-}
+void cbf_lookup(ClassicalBloomFilter& filter, const uint64_t* d_keys, uint64_t n, bool* d_results);
 
 // Free up memory
-void cbf_destroy(uint64_t* d_bits) {
-    cudaFree(d_bits);
-}
+void cbf_destroy(ClassicalBloomFilter& filter);
