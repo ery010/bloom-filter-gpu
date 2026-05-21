@@ -9,10 +9,11 @@ struct ClassicalBloomFilter {
     uint64_t* d_bits;
     uint32_t num_words;
     uint32_t k_hashes;
+    uint32_t shift;
 
 };
 
-ClassicalBloomFilter create_filter(uint32_t total_bits, uint32_t k);
+ClassicalBloomFilter create_filter(uint32_t total_bits, uint32_t k, uint32_t shift);
 
 // Insert
 void cbf_insert(ClassicalBloomFilter& filter, const uint64_t* d_keys, uint64_t n);
