@@ -13,7 +13,7 @@ struct ClassicalBloomFilter {
 
 };
 
-ClassicalBloomFilter create_filter(uint32_t total_bits, uint32_t k);
+ClassicalBloomFilter create_filter(uint64_t total_bits, uint32_t k);
 
 // Insert
 void cbf_insert(ClassicalBloomFilter& filter, const uint64_t* d_keys, uint64_t n);
