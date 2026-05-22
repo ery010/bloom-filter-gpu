@@ -25,10 +25,14 @@ The algorithms implemented in this project are:
 bloom-filter-gpu/
 ├── include/ 
 |   └── bloom_filter/
-|       ├── CBF.cuh
-|       ├── BBF.cuh
-|       ├── SBF.cuh
-│       └── CSBF.cuh
+|       ├── cbf.cu
+|       ├── bbf.cu
+|       ├── sbf.cu
+|       ├── csbf.cu
+|       ├── cbf.cuh
+|       ├── bbf.cuh
+|       ├── sbf.cuh
+│       └── csbf.cuh
 |
 ├── src/
 │   ├── bloom_filter.h
