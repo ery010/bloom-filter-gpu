@@ -1,6 +1,6 @@
 #include "cbf.cuh"
 #include "utils/hash_function.cuh"
-#include <bit>
+#include <cuda_runtime.h>
 
 // Device Kernels
 
