@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <stdexcept>
 
-// CBF struct helper
+// CBF struct
 struct ClassicalBloomFilter {
     uint64_t* d_bits;
     uint32_t num_words;
