@@ -1,8 +1,5 @@
 #pragma once
-#include <cuda.h>
-#include <cuda_runtime.h>
 #include <cstdint>
-#include <stdexcept>
 
 // CBF struct
 struct ClassicalBloomFilter {
