@@ -34,6 +34,8 @@ BlockedBloomFilter create_filter(uint64_t total_bits, uint32_t k, uint32_t num_b
 
     BlockedBloomFilter filter;
     filter.num_words = rounded_bits / 64;
+    filter.num_blocks = num_blocks;
+    filter.words_per_block = filter.num_words / num_blocks;
     filter.k_hashes = k;
     filter.shift = 64 - __builtin_ctz(filter.words_per_block);
 
