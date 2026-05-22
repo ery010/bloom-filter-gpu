@@ -37,6 +37,11 @@ BlockedBloomFilter create_filter(uint64_t total_bits, uint32_t k, uint32_t num_b
     filter.k_hashes = k;
     filter.shift = 64 - __builtin_ctz(filter.words_per_block);
 
+    size_t total_bytes = filter.num_words * sizeof(uint64_t);
+    cudaMalloc(&filter.d_bits, total_bytes);
+    cudaMemset(filter.d_bits, 0, total_bytes);
+
+    return filter;
 }
 
 
