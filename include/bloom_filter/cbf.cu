@@ -62,6 +62,7 @@ ClassicalBloomFilter create_filter(uint64_t total_bits, uint32_t k) {
         rounded_bits |= rounded_bits >> 4;
         rounded_bits |= rounded_bits >> 8;
         rounded_bits |= rounded_bits >> 16;
+        rounded_bits |= rounded_bits >> 32;
         rounded_bits++;
     }
 
