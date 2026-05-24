@@ -23,13 +23,15 @@ __global__ void bbf_insert_kernel(uint64_t* __restrict__ d_bits, const uint64_t*
         uint64_t word_in_block = (mixed >> shift) % words_per_block;
         uint64_t word = block_base + word_in_block;
         uint64_t mask = 1ULL << (mixed & 0x3F);
-        
+
         atomicOr(reinterpret_cast<unsigned long long*>(d_bits + word), mask);
     }
 }
 
 // Lookup Kernel
-
+__global__ void bbf_lookup_kernel(uint64_t* __restrict__ d_bits, const uint64_t* __restrict__ d_keys, uint64_t n, bool* __restrict__ d_results, uint32_t k, uint32_t num_blocks, uint32_t words_per_block, uint32_t shift) {
+    
+}
 
 // Host wrappers
 
@@ -74,7 +76,12 @@ void bbf_insert(BlockedBloomFilter& filter, const uint64_t* d_keys, uint64_t n) 
 }
 
 // Lookup host wrapper
-void bbf_lookup() {}
+void bbf_lookup(BlockedBloomFilter& filter, const uint64_t* d_keys, uint64_t n, bool* d_results) {
+    const uint32_t BLOCK_SIZE = 256;
+    uint64_t grid = (n + BLOCK_SIZE - 1) / BLOCK_SIZE;
+
+    bbf_lookup_kernel<<<grid, BLOCK_SIZE>>>(filter.d_bits, d_keys, n, d_results, filter.k_hashes, filter.num_blocks, filter.words_per_block, filter.shift);
+}
 
 
 // Free up memory
