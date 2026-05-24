@@ -5,6 +5,12 @@
 // Device Kernels
 
 // Insert Kernel
+__global__ void bbf_insert_kernel(uint64_t* __restrict__ d_bits, const uint64_t* __restrict__ d_keys, uint64_t n, uint32_t k, uint32_t num_blocks, uint32_t words_per_block, uint32_t shift) {
+    uint64_t tid = blockIdx.x * blockDim.x + threadIdx.x;
+    if (tid >= n) {
+        return;
+    };    
+}
 
 
 
@@ -46,4 +52,16 @@ BlockedBloomFilter create_filter(uint64_t total_bits, uint32_t k, uint32_t num_b
     return filter;
 }
 
+// Insert host wrapper
+void bbf_insert(BlockedBloomFilter& filter, const uint64_t* d_keys, uint64_t n) {
 
+}
+
+// Lookup host wrapper
+void bbf_lookup() {}
+
+
+// Free up memory
+void bbf_destroy(BlockedBloomFilter& filter) {
+    cudaFree(filter.d_bits);
+}
