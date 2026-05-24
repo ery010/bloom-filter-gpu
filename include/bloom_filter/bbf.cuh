@@ -17,7 +17,7 @@ BlockedBloomFilter create_filter(uint64_t total_bits, uint32_t k, uint32_t num_b
 void bbf_insert(BlockedBloomFilter& filter, const uint64_t* d_keys, uint64_t n);
 
 // Lookup
-void bbf_lookup(BlockedBloomFilter& filter, const uint64_t* d_keys, uint64_t n);
+void bbf_lookup(BlockedBloomFilter& filter, const uint64_t* d_keys, uint64_t n, bool* d_results);
 
 // Free up memory
 void bbf_destroy(BlockedBloomFilter& filter);

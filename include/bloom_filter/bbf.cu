@@ -10,12 +10,22 @@ __global__ void bbf_insert_kernel(uint64_t* __restrict__ d_bits, const uint64_t*
     if (tid >= n) {
         return;
     };    
+
+    uint64_t key = d_keys[tid];
+    uint64_t seed = generate_seed(key);
+
+    uint64_t block_hash = hash_position(seed, 0);
+    uint32_t block_id = block_hash % num_blocks;
+    uint32_t block_base = block_id * words_per_block;
+
+    for (uint32_t i = 0; i < k; i++) {
+        uint64_t mixed = hash_position(seed, i + 1);
+        uint64_t word_in_block = (mixed >> shift) % words_per_block;
+        uint64_t word = block_base + word_in_block;
+        uint64_t mask = 1ULL << (mixed & 0x3F);
+        atomicOr(d_bits + word, mask);
+    }
 }
-
-
-
-
-
 
 // Lookup Kernel
 
@@ -36,7 +46,7 @@ BlockedBloomFilter create_filter(uint64_t total_bits, uint32_t k, uint32_t num_b
         rounded_bits |= rounded_bits >> 16;
         rounded_bits |= rounded_bits >> 32;
         rounded_bits++;
-    }
+    }    
 
     BlockedBloomFilter filter;
     filter.num_words = rounded_bits / 64;
@@ -54,7 +64,12 @@ BlockedBloomFilter create_filter(uint64_t total_bits, uint32_t k, uint32_t num_b
 
 // Insert host wrapper
 void bbf_insert(BlockedBloomFilter& filter, const uint64_t* d_keys, uint64_t n) {
+    const uint32_t BLOCK_SIZE = 256;
+    uint64_t grid = (n + BLOCK_SIZE - 1) / BLOCK_SIZE;
 
+    bbf_insert_kernel<<<grid, BLOCK_SIZE>>>(filter.d_bits, d_keys, n, filter.k_hashes, filter.num_blocks, filter.words_per_block, filter.shift);
+
+    cudaDeviceSynchronize();
 }
 
 // Lookup host wrapper
