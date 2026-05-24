@@ -30,7 +30,7 @@ static constexpr __device__ uint64_t SALTS[] = {
 
 // Hash function helpers
 
-// Generate 64-bit seed from raw key via xxHash64
+// Generate 64-bit seed from raw key via xxHash64 (64-bit algorithm)
 __device__ __forceinline__ uint64_t generate_seed(uint64_t key) {
     constexpr uint64_t PRIME1 = 0x9E3779B185EBCA87ULL;
     constexpr uint64_t PRIME2 = 0xC2B2AE3D27D4EB4FULL;
