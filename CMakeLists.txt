@@ -49,6 +49,11 @@ add_executable(test_cbf
     include/bloom_filter/cbf.cu)
 target_link_libraries(test_cbf PRIVATE bloom_cuda_core)
 
+add_executable(test_bbf 
+    tests/test_bbf.cu 
+    include/bloom_filter/bbf.cu)
+target_link_libraries(test_bbf PRIVATE bloom_cuda_core)
+
 # ── Benchmarks (uncomment when ready) ────────────────────────────────────────
 # add_executable(bench_all benchmarks/bench_all.cu)
 # target_link_libraries(bench_all PRIVATE bloom_cuda_core)

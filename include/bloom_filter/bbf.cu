@@ -23,7 +23,8 @@ __global__ void bbf_insert_kernel(uint64_t* __restrict__ d_bits, const uint64_t*
         uint64_t word_in_block = (mixed >> shift) % words_per_block;
         uint64_t word = block_base + word_in_block;
         uint64_t mask = 1ULL << (mixed & 0x3F);
-        atomicOr(d_bits + word, mask);
+        
+        atomicOr(reinterpret_cast<unsigned long long*>(d_bits + word), mask);
     }
 }
 
