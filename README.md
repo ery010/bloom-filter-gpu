@@ -71,6 +71,7 @@ cmake --build build
 ### Tests
 - [x] Hash function test
     - [x] Verify xxHash CUDA implementation against official implementation
+    
 - [x] Classical Bloom Filter test
     - [x] Insertions
     - [x] Key lookups
@@ -83,7 +84,7 @@ cmake --build build
     - [ ] False positive rate
     - [ ] No false negatives
 
-- [x] Sectorized Bloom Filter test
+- [ ] Sectorized Bloom Filter test
     - [ ] Insertions
     - [ ] Key lookups
     - [ ] False positive rate
