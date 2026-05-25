@@ -59,6 +59,42 @@ cmake --build build
 .\build\Debug\test_bloom_filter.exe
 ```
 
+## Implementation Progress
+
+### Bloom Filter Core
+- [x] Hash function defintions (`hash_function.cuh`)
+- [x] Classical Bloom Filter (`cbf.cuh` / `cbf.cu`)
+- [x] Blocked Bloom Filter (`bbf.cuh` / `bbf.cu`)
+- [ ] Sectorized Bloom Filter (`sbf.cuh` / `sbf.cu`)
+- [ ] Cache-Sectorized Bloom Filter (`csbf.cuh` / `csbf.cu`)
+
+### Tests
+- [x] Hash function test
+    - [x] Verify xxHash CUDA implementation against official implementation
+- [x] Classical Bloom Filter test
+    - [x] Insertions
+    - [x] Key lookups
+    - [x] False positive rate
+    - [x] No false negatives
+
+- [ ] Blocked Bloom Filter test
+    - [x] Insertions
+    - [ ] Key lookups
+    - [ ] False positive rate
+    - [ ] No false negatives
+
+- [x] Sectorized Bloom Filter test
+    - [ ] Insertions
+    - [ ] Key lookups
+    - [ ] False positive rate
+    - [ ] No false negatives
+
+- [ ] Cache-Sectorized Bloom Filter test
+    - [ ] Insertions
+    - [ ] Key lookups
+    - [ ] False positive rate
+    - [ ] No false negatives
+
 ## References
 
 Jünger et al., *Optimizing Bloom Filters for Modern GPU Architectures*, ACM ICS
