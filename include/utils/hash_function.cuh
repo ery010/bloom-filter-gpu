@@ -10,6 +10,7 @@
 // the exact values — these are our own chosen constants satisfying
 // the mathematical requirements.
 static constexpr __device__ uint64_t SALTS[] = {
+    // hash function salts
     0x9E3779B185EBCA87ULL,  // Fibonacci hashing / golden ratio
     0xBF58476D1CE4E5B9ULL,  // splitmix64 multiplier 1
     0x94D049BB133111EBULL,  // splitmix64 multiplier 2
@@ -26,6 +27,9 @@ static constexpr __device__ uint64_t SALTS[] = {
     0xD1B54A32D192ED03ULL,  // manually chosen, verified odd
     0x246C1D2BB1C6E26FULL,  // manually chosen, verified odd
     0xD2B74407B1CE6E93ULL,  // manually chosen, verified odd
+
+    // block hash salt
+    0x8FB21C651E98DF25ULL,  // block-selection salt, verified odd
 };
 
 // Hash function helpers
