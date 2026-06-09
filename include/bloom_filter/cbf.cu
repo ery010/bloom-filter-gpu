@@ -5,13 +5,13 @@
 // Device Kernels
 
 // Insert Kernel
-__global__ void cbf_insert_kernel(uint64_t* __restrict__ d_bits, const uint64_t* __restrict__ d_keys, uint64_t n, int k, uint32_t num_words, uint32_t shift) {
+__global__ void cbf_insert_kernel(uint64_t* __restrict__ d_bits, const uint64_t* __restrict__ d_keys, uint64_t n, uint32_t k, uint32_t num_words, uint32_t shift) {
     uint32_t tid = blockIdx.x * blockDim.x + threadIdx.x;
     if (tid < n) {
         uint64_t key = d_keys[tid];
         uint64_t seed = generate_seed(key);
 
-        for (int i = 0; i < k; i++) {
+        for (uint32_t i = 0; i < k; i++) {
             uint64_t mixed = hash_position(seed, i);
             uint64_t word = (mixed >> shift) % num_words;
             uint64_t mask = bit_mask(mixed);
@@ -22,7 +22,7 @@ __global__ void cbf_insert_kernel(uint64_t* __restrict__ d_bits, const uint64_t*
 }
 
 // Lookup Kernel
-__global__ void cbf_lookup_kernel(const uint64_t* __restrict__ d_bits, const uint64_t* __restrict__ d_keys, uint64_t n, bool* __restrict__ d_results, int k, uint32_t num_words, uint32_t shift) {
+__global__ void cbf_lookup_kernel(const uint64_t* __restrict__ d_bits, const uint64_t* __restrict__ d_keys, uint64_t n, bool* __restrict__ d_results, uint32_t k, uint32_t num_words, uint32_t shift) {
     uint32_t tid = blockIdx.x * blockDim.x + threadIdx.x;
     if (tid < n) {
         uint64_t key = d_keys[tid];
@@ -30,7 +30,7 @@ __global__ void cbf_lookup_kernel(const uint64_t* __restrict__ d_bits, const uin
 
         bool found = true;
 
-        for (int i = 0; i < k; i++) {
+        for (uint32_t i = 0; i < k; i++) {
             uint64_t mixed = hash_position(seed, i);
             uint64_t word = (mixed >> shift) % num_words;
             uint64_t mask = bit_mask(mixed);
@@ -47,7 +47,7 @@ __global__ void cbf_lookup_kernel(const uint64_t* __restrict__ d_bits, const uin
 // Host Wrappers
 
 // Create the bloom filter
-ClassicalBloomFilter create_filter(uint64_t total_bits, int k) {
+ClassicalBloomFilter create_filter(uint64_t total_bits, uint32_t k) {
 
     // Round up to power of 2; can use std::bit_ceil() in C++20
     uint64_t rounded_bits = total_bits;
