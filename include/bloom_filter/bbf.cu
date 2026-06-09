@@ -6,7 +6,7 @@
 
 // Insert Kernel
 __global__ void bbf_insert_kernel(uint64_t* __restrict__ d_bits, const uint64_t* __restrict__ d_keys, uint64_t n, uint32_t k, uint32_t num_blocks, uint32_t words_per_block, uint32_t shift) {
-    uint64_t tid = blockIdx.x * blockDim.x + threadIdx.x;
+    uint32_t tid = blockIdx.x * blockDim.x + threadIdx.x;
     if (tid < n) {
         uint64_t key = d_keys[tid];
         uint64_t seed = generate_seed(key);
@@ -28,7 +28,7 @@ __global__ void bbf_insert_kernel(uint64_t* __restrict__ d_bits, const uint64_t*
 
 // Lookup Kernel
 __global__ void bbf_lookup_kernel(uint64_t* __restrict__ d_bits, const uint64_t* __restrict__ d_keys, uint64_t n, bool* __restrict__ d_results, uint32_t k, uint32_t num_blocks, uint32_t words_per_block, uint32_t shift) {
-    uint64_t tid = blockIdx.x * blockDim.x + threadIdx.x;
+    uint32_t tid = blockIdx.x * blockDim.x + threadIdx.x;
     if (tid < n) {
         uint64_t key = d_keys[tid];
         uint64_t seed = generate_seed(key);
