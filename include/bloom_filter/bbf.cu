@@ -5,7 +5,7 @@
 // Device Kernels
 
 // Insert Kernel
-__global__ void bbf_insert_kernel(uint64_t* __restrict__ d_bits, const uint64_t* __restrict__ d_keys, uint64_t n, uint32_t k, uint32_t num_blocks, uint32_t words_per_block, uint32_t shift) {
+__global__ void bbf_insert_kernel(uint64_t* __restrict__ d_bits, const uint64_t* __restrict__ d_keys, uint64_t n, int k, uint32_t num_blocks, uint32_t words_per_block, uint32_t shift) {
     uint32_t tid = blockIdx.x * blockDim.x + threadIdx.x;
     if (tid < n) {
         uint64_t key = d_keys[tid];
@@ -15,7 +15,7 @@ __global__ void bbf_insert_kernel(uint64_t* __restrict__ d_bits, const uint64_t*
         uint32_t block_id = block_hash % num_blocks;
         uint32_t block_base = block_id * words_per_block;
 
-        for (uint32_t i = 0; i < k; i++) {
+        for (int i = 0; i < k; i++) {
             uint64_t mixed = hash_position(seed, i);
             uint64_t word_in_block = (mixed >> shift) % words_per_block;
             uint64_t word = block_base + word_in_block;
@@ -27,7 +27,7 @@ __global__ void bbf_insert_kernel(uint64_t* __restrict__ d_bits, const uint64_t*
 }
 
 // Lookup Kernel
-__global__ void bbf_lookup_kernel(uint64_t* __restrict__ d_bits, const uint64_t* __restrict__ d_keys, uint64_t n, bool* __restrict__ d_results, uint32_t k, uint32_t num_blocks, uint32_t words_per_block, uint32_t shift) {
+__global__ void bbf_lookup_kernel(uint64_t* __restrict__ d_bits, const uint64_t* __restrict__ d_keys, uint64_t n, bool* __restrict__ d_results, intt k, uint32_t num_blocks, uint32_t words_per_block, uint32_t shift) {
     uint32_t tid = blockIdx.x * blockDim.x + threadIdx.x;
     if (tid < n) {
         uint64_t key = d_keys[tid];
@@ -39,7 +39,7 @@ __global__ void bbf_lookup_kernel(uint64_t* __restrict__ d_bits, const uint64_t*
 
         bool found = true;
 
-        for (uint32_t i = 0; i < k; i++) {
+        for (int i = 0; i < k; i++) {
             uint64_t mixed = hash_position(seed, i);
             uint64_t word_in_block = (mixed >> shift) % words_per_block;
             uint64_t word = block_base + word_in_block;
@@ -57,7 +57,7 @@ __global__ void bbf_lookup_kernel(uint64_t* __restrict__ d_bits, const uint64_t*
 // Host wrappers
 
 // Create bloom filter
-BlockedBloomFilter create_filter(uint64_t total_bits, uint32_t k, uint32_t num_blocks) {
+BlockedBloomFilter create_filter(uint64_t total_bits, int k, uint32_t num_blocks) {
     // Round up to power of 2; can use std::bit_ceil() in C++20
     
     uint64_t rounded_bits = total_bits;

@@ -7,11 +7,11 @@ struct BlockedBloomFilter {
     uint32_t num_words;
     uint32_t num_blocks; // BLOCK_SIZE = m (bit_array size) / b (num_blocks)
     uint32_t words_per_block;
-    uint32_t k_hashes;
     uint32_t shift;
+    int k_hashes;
 };
 
-BlockedBloomFilter create_filter(uint64_t total_bits, uint32_t k, uint32_t num_blocks);
+BlockedBloomFilter create_filter(uint64_t total_bits, int k, uint32_t num_blocks);
 
 // Insert
 void bbf_insert(BlockedBloomFilter& filter, const uint64_t* d_keys, uint64_t n);
